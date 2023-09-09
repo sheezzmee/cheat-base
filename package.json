@@ -1,0 +1,22 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "@webpack-cli/generators": "^3.0.7",
+    "prettier": "^2.8.8",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "version": "1.0.0",
+  "description": "My webpack project",
+  "name": "my-webpack-project",
+  "scripts": {
+    "build": "webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch"
+  },
+  "dependencies": {
+    "@types/tampermonkey": "^4.20.2",
+    "fuzzysort": "^2.0.4"
+  }
+}
