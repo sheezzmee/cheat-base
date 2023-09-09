@@ -57,7 +57,10 @@ class CheatBase {
     gameClasses = {
         world: null,
         localPlayer: null,
-        gameMode: null
+        gameMode: null,
+        inventoryModel: null,
+        game: null,
+        hud: null
     };
     runAfterPhysicsUpdate = [];
 }
