@@ -1,9 +1,6 @@
 import { cheatBase } from '../cheatBase.js';
 
 class Supplies {
-    /**
-     * @param {string} supply 
-     */
     activateSupplyByName = supply => {
         const supplies = cheatBase.gameClasses.inventoryModel?.items;
 

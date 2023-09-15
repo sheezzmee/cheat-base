@@ -1,13 +1,6 @@
 import { cheatBase } from '../cheatBase.js';
 
 class Notifications {
-    /**
-     * @param {string[]} textLines 
-     * @param {Function} buttonYesListener 
-     * @param {Function} buttonCloseListener 
-     * @param {number} timeInMs 
-     * @param {string} title 
-     */
     alert = (
         textLines, 
         buttonYesListener = null, 
@@ -25,13 +18,6 @@ class Notifications {
         title
     )));
 
-    /**
-     * @param {string[]} textLines 
-     * @param {Function} buttonYesListener 
-     * @param {Function} buttonCloseListener 
-     * @param {number} timeInMs 
-     * @param {string} title 
-     */
     warning = (
         textLines, 
         buttonYesListener = null, 
@@ -49,13 +35,6 @@ class Notifications {
         title
     )))
 
-    /**
-     * @param {string[]} textLines 
-     * @param {Function} buttonYesListener 
-     * @param {Function} buttonCloseListener 
-     * @param {number} timeInMs 
-     * @param {string} title 
-     */
     info = (
         textLines, 
         buttonYesListener = null, 

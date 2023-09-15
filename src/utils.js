@@ -140,3 +140,23 @@ export const prototypeHook = (constructor, selector, callBack, after = false) =>
         return prototype[`${functionName}_copy`].apply(this, arguments);
     }
 }
+
+export const proxyHook = (object, selector, callBack) => {
+    const functionName = ((object[selector] && selector) || find(object, selector)?.[0]);
+
+    if (!functionName)
+        return;
+
+    !object[`${functionName}_copy`] && (object[`${functionName}_copy`] = object[functionName]);
+
+    object[functionName] = new Proxy({}, {
+        get: (target, prop, receiver) => function () {
+            const callBackResult = callBack(prop, arguments);
+
+            if (callBackResult)
+                return callBackResult;
+            
+            return object[`${functionName}_copy`][prop].apply(undefined, arguments);
+        }
+    })
+}

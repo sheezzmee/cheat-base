@@ -30,6 +30,7 @@ class CheatBase {
                                 detail: __this__
                             })
                         )
+                        __this__.dispatch(new PressedAnyButton(true));
                     }
 
                     dispatchEvent(
@@ -47,7 +48,6 @@ class CheatBase {
 
         addEventListener('cheat-base-ready', event => {
             unsafeWindow.toxic = event.detail;
-            this.dispatch(new PressedAnyButton(true));
         })
     }
 
@@ -60,7 +60,8 @@ class CheatBase {
         gameMode: null,
         inventoryModel: null,
         game: null,
-        hud: null
+        hud: null,
+        players: null
     };
     runAfterPhysicsUpdate = [];
 }
