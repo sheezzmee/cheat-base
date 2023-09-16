@@ -2,6 +2,12 @@ import { cheatBase } from '../cheatBase.js';
 import { toLong } from '../utils.js';
 
 class BattleChat {
+    isInputActive = () => !!(
+        cheatBase.gameClasses.hud?.components_map.map.get(
+            BattleChatHudComponent.$metadata$.$kClass$
+        )?.array[0].isInputActive
+    );
+
     sendMessage = (message, teamMessage = false) => cheatBase.dispatch(
         new SendMessage_0(message, teamMessage)
     )

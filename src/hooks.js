@@ -2,6 +2,15 @@ import { cheatBase } from './cheatBase.js';
 import { toLong, prototypeHook, find } from './utils.js';
 import Player from './GameClasses/Player.js';
 
+const createProperty = name => ({
+    get: function() {
+        return this[name];
+    },
+    set: function(value) {
+        this[name] = value;
+    }
+});
+
 export default () => {
     {
         const sendFunction = find(BattleEntity.prototype, 'i:12')[1];
@@ -22,6 +31,29 @@ export default () => {
             }
 
             return onFunction.call(this, messageClass, priority, dispatchOnce, handler);
+        }
+
+        const entity = new BattleEntity;
+        Object.defineProperties(BattleEntity.prototype, {
+            components_map: createProperty(find(entity, 'map')[0]),
+            components: createProperty(find(entity, 'list')[0]),
+        })
+
+        const map = new NativeIdentityMap;
+        Object.defineProperties(NativeIdentityMap.prototype, {
+            map: createProperty(find(map, 'i:0')[0])
+        })
+
+        const list = new NativeList;
+        Object.defineProperties(NativeList.prototype, {
+            array: createProperty(find(list, 'i:0')[0])
+        })
+    }
+
+    {
+        const init = find(BattleEntity.prototype, 'i:0')[1];
+        Quaternion.prototype.send = function() {
+            return init.apply(this, arguments);
         }
     }
 
@@ -81,15 +113,6 @@ export default () => {
         })
     }
 
-    const createProperty = name => ({
-        get: function() {
-            return this[name];
-        },
-        set: function(value) {
-            this[name] = value;
-        }
-    });
-
     {
         const vector3 = new Vector3;
         Object.defineProperties(Vector3.prototype, {
@@ -108,14 +131,7 @@ export default () => {
             position: createProperty(find(bodyState, 'i:3')[0]),
         })
     }
-
-    {
-        const nativeList = new NativeList;
-        Object.defineProperties(NativeList.prototype, {
-            array: createProperty(find(nativeList, 'i:0')[0])
-        })
-    }
-
+    
     {
         const tankState = new GetTankState;
         Object.defineProperties(GetTankState.prototype, {
@@ -125,6 +141,39 @@ export default () => {
         const clientTankState = new ClientTankState;
         Object.defineProperties(ClientTankState.prototype, {
             name: createProperty(find(clientTankState, 'i:0')[0])
+        })
+    }
+
+    {
+        const battleChat = new BattleChatHudComponent;
+        Object.defineProperties(BattleChatHudComponent.prototype, {
+            isInputActive: createProperty(find(battleChat, 'i:5')[0])
+        })
+    }
+
+    {
+        const body = new Body;
+        Object.defineProperties(Body.prototype, {
+            movable: createProperty(find(body, 'i:5')[0])
+        })
+    }
+
+    {
+        const user = new User;
+        Object.defineProperties(User.prototype, {
+            id: createProperty(find(user, 'i:0')[0]),
+            crystals: createProperty(find(user, 'i:2')[0]),
+            coins: createProperty(find(user, 'i:3')[0]),
+            rank: createProperty(find(user, 'i:5')[0]),
+            score: createProperty(find(user, 'i:7')[0]),
+            gearScore: createProperty(find(user, 'i:8')[0]),
+            weaponGS: createProperty(find(user, 'i:9')[0]),
+            hullGS: createProperty(find(user, 'i:10')[0]),
+            droneGS: createProperty(find(user, 'i:11')[0]),
+            resistanceGS: createProperty(find(user, 'i:12')[0]),
+            uid: createProperty(find(user, 'i:14')[0]),
+            clanTag: createProperty(find(user, 'i:15')[0]),
+            hasPremium: createProperty(find(user, 'i:18')[0])
         })
     }
 

@@ -14,6 +14,18 @@ class Battle {
         if (id.includes('#/battle='))
             id = BigInt(`0x${id.split('=').at(-1)}`).toString()
 
+        switch (battleTeam) {
+            case 'TEAM_A':
+                battleTeam = 0;
+                break
+            case 'TEAM_B':
+                battleTeam = 1;
+                break
+            case 'NONE':
+                battleTeam = 2;
+                break;
+        }
+        
         cheatBase.dispatch(new Fight(
             toLong(id),
             new BattleTeam('', battleTeam)

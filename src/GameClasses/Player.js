@@ -20,7 +20,7 @@ export default class Player {
         
         this.id = find(this.id, 'long')[1].toString();
         this.team = find(this.team, 'team.i:0')[1];
-        this.map = find(entity, 'map.i:0')[1];
+        this.map = entity.components_map.map;
         this.body = find(this.get(TankPhysicsComponent), 'body')[1];
         this.state = find(this.body, 'state')[1];
         
@@ -52,8 +52,8 @@ export default class Player {
     
                 this._name = `${tag ? `[${tag}] ` : ''}${name}`;
             } else {
-                const name = find(cheatBase.store, 'state.user.i:14')?.[1],
-                    tag = find(cheatBase.store, 'state.user.i:15')?.[1];
+                const name = find(cheatBase.store, 'state.user')?.[1].uid,
+                    tag = find(cheatBase.store, 'state.user')?.[1].clanTag;
     
                 this._name = `${tag ? `[${tag}] ` : ''}${name}`;
             }
