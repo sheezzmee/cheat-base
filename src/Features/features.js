@@ -6,4 +6,12 @@ import { battleChat } from './battleChat.js';
 import { supplies } from './supplies.js';
 import { battleMap } from './battleMap.js';
 
-export { notifications, textMessages, battle, containers, battleChat, supplies, battleMap }
+export {
+	notifications,
+	textMessages,
+	battle,
+	containers,
+	battleChat,
+	supplies,
+	battleMap
+};

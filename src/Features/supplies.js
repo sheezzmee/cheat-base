@@ -1,16 +1,15 @@
 import { cheatBase } from '../cheatBase.js';
 
 class Supplies {
-    activateSupplyByName = supply => {
-        const supplies = cheatBase.gameClasses.inventoryModel?.items;
+	activateSupplyByName = supply => {
+		const supplies = cheatBase.gameClasses.inventoryModel?.items;
 
-        if (!supplies)
-            return;
+		if (!supplies) return;
 
-        supplies[supply]();
-    }
+		supplies[supply]();
+	};
 
-    getSupplies = () => cheatBase.gameClasses.inventoryModel?.items;
+	getSupplies = () => cheatBase.gameClasses.inventoryModel?.items;
 }
 
-export const supplies = new Supplies;
+export const supplies = new Supplies();

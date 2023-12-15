@@ -17,6 +17,11 @@
   },
   "dependencies": {
     "@types/tampermonkey": "^4.20.2",
-    "fuzzysort": "^2.0.4"
+    "crypto-browserify": "^3.12.0",
+    "crypto-js": "^4.2.0",
+    "fast-json-stringify": "^5.9.1",
+    "fuzzysort": "^2.0.4",
+    "stream-browserify": "^3.0.0",
+    "terser-webpack-plugin": "^5.3.9"
   }
 }
