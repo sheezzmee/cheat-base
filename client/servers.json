@@ -1,0 +1,10 @@
+{
+	"public-deploy": {
+		"url": "https://public-deploy[n].test-eu.tankionline.com/browser-public/index.html",
+		"search": "?config-template=/cors/https://c{server}.public-deploy[n].test-eu.tankionline.com/config.xml&resources=/cors/public-deploy[n].test-eu.tankionline.com/resources&balancer=cors/balancer.public-deploy[n].test-eu.tankionline.com/balancer"
+	},
+	"main": {
+		"url": "https://tankionline.com/play",
+		"search": "?config-template=/cors/https://c{server}.eu.tankionline.com/config.xml&resources=/cors/s.eu.tankionline.com/"
+	}
+}
