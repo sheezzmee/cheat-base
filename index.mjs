@@ -14,11 +14,10 @@ app.use('/public', express.static(path.resolve('public')));
 app.get('/cors/:proxyUrl*', (req, res) => {
     req.url = req.url.replace('/cors/', '/');
 
-    if (!req.url.includes('config.xml')) {
-        req.url = req.url.replaceAll('https://', '').replaceAll('https:/', '');
+    if (!req.url.includes('https://') && req.url.includes('https:/')) {
+        req.url = req.url.replace('https:/', 'https://');
     }
 
-    console.log(req.url);
     proxy.emit('request', req, res);
 });
 app.get('*', (request, response) => {
