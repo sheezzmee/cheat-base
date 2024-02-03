@@ -11,7 +11,7 @@ const proxy = corsAnywhere.createServer({
 const app = express();
 const port = parseInt(process.env.PORT, 10) || 8080;
 
-app.use(express.static('client/dist'));
+app.use('/', express.static('client/dist'));
 app.get('/cors/:proxyUrl*', (req, res) => {
     req.url = req.url.replace('/cors/', '/');
     proxy.emit('request', req, res);
