@@ -10,7 +10,7 @@ module.exports = {
 		main: './client/index.js'
 	},
 	output: {
-		path: 'client/public'
+		path: 'client/dist'
 	},
 	resolve: {
 		extensions: ['...', '.ts', '.tsx', '.jsx']
