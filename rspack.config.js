@@ -73,7 +73,8 @@ module.exports = {
 		}),
 		new rspack.ProgressPlugin({}),
 		new rspack.HtmlRspackPlugin({
-			template: './client/index.html'
+			template: './client/index.html',
+			publicPath: '/public'
 		}),
 		isDev ? new refreshPlugin() : null
 	].filter(Boolean)

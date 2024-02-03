@@ -8,6 +8,6 @@ export const scriptLoader = () => {
     }
 
     if (config.scriptLoader.shizoval) {
-        execute('scripts/shizoval.min.js', 'src');
+        execute('/public/scripts/shizoval.min.js', 'src');
     }
 };
