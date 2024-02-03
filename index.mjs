@@ -12,10 +12,12 @@ const port = parseInt(process.env.PORT, 10) || 8080;
 
 app.use('/public', express.static(path.resolve('public')));
 app.get('/cors/:proxyUrl*', (req, res) => {
-    req.url = req.url
-        .replace('/cors/', '/')
-        .replaceAll('https://', '')
-        .replaceAll('https:/', '');
+    req.url = req.url.replace('/cors/', '/');
+
+    if (!req.url.includes('config.xml')) {
+        req.url = req.url.replaceAll('https://', '').replaceAll('https:/', '');
+    }
+
     console.log(req.url);
     proxy.emit('request', req, res);
 });
