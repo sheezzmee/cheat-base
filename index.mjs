@@ -17,7 +17,7 @@ app.get('/cors/:proxyUrl*', (req, res) => {
     proxy.emit('request', req, res);
 });
 app.get('*', (request, response) => {
-    response.sendFile(path.resolve('client', 'dist', 'index.html'));
+    response.sendFile(path.resolve('public', 'index.html'));
 });
 
 app.listen(port);
