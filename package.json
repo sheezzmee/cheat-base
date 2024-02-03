@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "SET NODE_ENV=development & rspack serve",
 		"build": "SET NODE_ENV=production & rspack build",
-		"start": "npm run build & node src/index.mjs"
+		"start": "node src/index.mjs"
 	},
 	"dependencies": {
 		"cors-anywhere": "^0.4.4",
