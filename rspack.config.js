@@ -52,6 +52,18 @@ module.exports = {
 						}
 					}
 				]
+			},
+			{
+				test: /\.(sass|scss)$/,
+				use: [
+					{
+						loader: 'sass-loader',
+						options: {
+							// ...
+						}
+					}
+				],
+				type: 'css/auto' 
 			}
 		]
 	},
