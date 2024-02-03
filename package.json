@@ -1,28 +1,28 @@
 {
-	"name": "rspack-react-starter",
-	"private": true,
-	"version": "1.0.0",
-	"scripts": {
-		"dev": "SET NODE_ENV=development & rspack serve",
-		"build": "SET NODE_ENV=production & rspack build",
-		"start": "node index.mjs"
-	},
-	"dependencies": {
-		"cors-anywhere": "^0.4.4",
-		"express": "^4.18.2",
-		"fuzzysort": "^2.0.4",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"react-loader-spinner": "^6.1.6",
-		"sass": "^1.70.0",
-		"sass-loader": "^14.1.0"
-	},
-	"devDependencies": {
-		"@rspack/cli": "0.5.3",
-		"@rspack/core": "0.5.3",
-		"@rspack/plugin-react-refresh": "0.5.3",
-		"@types/react": "^18.2.48",
-		"@types/react-dom": "^18.2.18",
-		"react-refresh": "^0.14.0"
-	}
+    "name": "rspack-react-starter",
+    "private": true,
+    "version": "1.0.0",
+    "scripts": {
+        "dev": "SET NODE_ENV=development & rspack serve",
+        "build": "SET NODE_ENV=production & rspack build",
+        "start": "node --experimental-modules index.mjs"
+    },
+    "dependencies": {
+        "cors-anywhere": "^0.4.4",
+        "express": "^4.18.2",
+        "fuzzysort": "^2.0.4",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-loader-spinner": "^6.1.6",
+        "sass": "^1.70.0",
+        "sass-loader": "^14.1.0"
+    },
+    "devDependencies": {
+        "@rspack/cli": "0.5.3",
+        "@rspack/core": "0.5.3",
+        "@rspack/plugin-react-refresh": "0.5.3",
+        "@types/react": "^18.2.48",
+        "@types/react-dom": "^18.2.18",
+        "react-refresh": "^0.14.0"
+    }
 }

@@ -19,7 +19,7 @@ export const downloadScript = url => {
             fetch(`/cors/${new URL(scriptURL, url).toString()}`).then(
                 async response => {
                     scriptLoader();
-                    eval(modifyScript(await response.text(), url));
+                    execute(modifyScript(await response.text(), url));
                     unmount();
                 }
             );
@@ -47,7 +47,10 @@ switch (getStartupType()) {
 
         if (server > 0 && server < 10) {
             const url = servers['public-deploy'].url.replace('[n]', server);
-            setPathName(location.pathname + url);
+            setPathName(
+                location.pathname +
+                    servers['public-deploy'].search.replaceAll('[n]', server)
+            );
             downloadScript(url);
             break;
         }
