@@ -2,6 +2,7 @@ import * as utils from './utils.js';
 import hooks from './hooks/index.js';
 import config, { saveConfig } from '../config.js';
 
+let dispatchFunction;
 class CheatBase extends Event {
     _dispatchLog = config.dispatchLog;
     ready = false;
@@ -18,12 +19,11 @@ class CheatBase extends Event {
         utils.prototypeHook(Store, 'i:0', function () {
             __this__.gameClasses.store = this;
 
-            const dispatchFunction = utils.find(this, 'i:3')?.[0];
+            if (!dispatchFunction) {
+                dispatchFunction = this.dispatchFunction;
+            }
 
-            !this.dispatchFunction &&
-                (this.dispatchFunction = this[dispatchFunction]);
-
-            this[dispatchFunction] = function (action) {
+            this.dispatchFunction = function (action) {
                 const actionName = utils.getSimpleName(action);
 
                 if (actionName === 'Init' && __this__.ready === false) {
@@ -34,7 +34,7 @@ class CheatBase extends Event {
                 }
 
                 if (actionName === 'PauseActivated') {
-                    return this.dispatchFunction(new DeactivatePause());
+                    return dispatchFunction.call(this, new DeactivatePause());
                 }
 
                 const event = new Event(actionName);
@@ -44,7 +44,7 @@ class CheatBase extends Event {
                 __this__.dispatchLog &&
                     console.log(`store.dispatch(${actionName})`, action);
 
-                return this.dispatchFunction(action);
+                return dispatchFunction.call(this, action);
             };
         });
     };

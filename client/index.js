@@ -1,8 +1,9 @@
 import { mount, unmount } from './menu/main';
 import servers from './servers.json';
 import { setPathName } from './cheatBase/utils';
-import { modifyScript } from './modifyScript';
+import { modifyScript } from './scriptModification';
 import { scriptLoader } from './scriptLoader';
+import './formatter'
 
 export const execute = (code, type = 'text') => {
     const script = document.createElement('script');
@@ -54,6 +55,10 @@ switch (getStartupType()) {
             downloadScript(url);
             break;
         }
+
+        setPathName();
+        mount();
+        break;
     case 'main':
         setPathName(location.pathname + servers.main.search);
         downloadScript(servers.main.url);

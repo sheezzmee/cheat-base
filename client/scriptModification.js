@@ -111,8 +111,8 @@ export const modifyScript = (script, url) => {
     script = script.replaceAll('new Image;', 'new Image;e.crossOrigin = "";');
 
     // получение всех конструкторов
-    script = script.replace(
-        /(?<begin>function \w+\(\w,\w,\w,\w,\w,\w,\w,\w(?:,\w)?\)\{)(?<end>null!=\w&&\(\w\.prototype=Object\.create\(\w\.prototype\))/,
+    script = script.replaceAll(
+        /(?<begin>function \w+\(\w,\w,\w,\w,\w,\w,\w,\w(?:,\w)?\)\{)(?<end>null!=\w&&\(\w\.prototype=Object\.create\(\w\.prototype\))/g,
         `$<begin>window.setMetadata.apply(null, arguments);$<end>`
     );
 
@@ -128,6 +128,6 @@ export const modifyScript = (script, url) => {
         /function (?<allocateFuncName>[$\w]+)\([$\w]+\)\{return function\([$\w]+,[$\w]+\)\{return [$\w]+\([$\w]+,[$\w]+,[$\w]+\([$\w]+\([$\w]+\)\)\)\}\([$\w]+,new DataView\(new ArrayBuffer\([$\w]+\)\)\)\}/,
         '$&window.allocateByteBuffer=$<allocateFuncName>;'
     );
-
+    
     return script;
 };
