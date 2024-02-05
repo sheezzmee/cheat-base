@@ -1,4 +1,4 @@
-import { find } from '../utils.js';
+import { find } from '../../shared/utils.js';
 
 import battleEntityHooks from './BattleEntity';
 import shopHooks from './Shop';

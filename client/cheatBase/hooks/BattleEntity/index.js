@@ -1,5 +1,5 @@
 import regex from './regex.js';
-import { find, regexFinder } from '../../utils.js';
+import { find, regexFinder } from '../../../shared/utils.js';
 import { createProperty } from '../index.js';
 
 export default () => {

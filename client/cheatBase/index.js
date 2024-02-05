@@ -1,6 +1,6 @@
-import * as utils from './utils.js';
+import * as utils from '../shared/utils.js';
 import hooks from './hooks/index.js';
-import config, { saveConfig } from '../config.js';
+import config, { saveConfig } from '../shared/config.js';
 
 let dispatchFunction;
 class CheatBase extends Event {

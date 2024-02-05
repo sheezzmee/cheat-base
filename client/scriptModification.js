@@ -1,5 +1,5 @@
 import { cheatBase } from './cheatBase';
-import { getSimpleName, getNamedClasses } from './cheatBase/utils';
+import { getSimpleName, getNamedClasses } from './shared/utils';
 
 window.shouldSendCommand = true;
 const modifySendCommandFunction = script => {
@@ -128,6 +128,6 @@ export const modifyScript = (script, url) => {
         /function (?<allocateFuncName>[$\w]+)\([$\w]+\)\{return function\([$\w]+,[$\w]+\)\{return [$\w]+\([$\w]+,[$\w]+,[$\w]+\([$\w]+\([$\w]+\)\)\)\}\([$\w]+,new DataView\(new ArrayBuffer\([$\w]+\)\)\)\}/,
         '$&window.allocateByteBuffer=$<allocateFuncName>;'
     );
-    
+
     return script;
 };

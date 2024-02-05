@@ -1,15 +1,9 @@
 import { mount, unmount } from './menu/main';
-import servers from './servers.json';
-import { setPathName } from './cheatBase/utils';
+import servers from './shared/servers.json';
+import { setPathName, execute, getStartupType } from './shared/utils';
 import { modifyScript } from './scriptModification';
 import { scriptLoader } from './scriptLoader';
-import './formatter'
-
-export const execute = (code, type = 'text') => {
-    const script = document.createElement('script');
-    script[type] = code;
-    document.body.appendChild(script);
-};
+import './formatter';
 
 export const downloadScript = url => {
     fetch(`/cors/${url}`).then(async response => {
@@ -30,16 +24,6 @@ export const downloadScript = url => {
             mount();
         }
     });
-};
-
-const getStartupType = () => {
-    if (location.pathname.includes('/public-deploy')) {
-        return 'public-deploy';
-    } else if (location.pathname.includes('/main')) {
-        return 'main';
-    }
-
-    return 'other';
 };
 
 switch (getStartupType()) {

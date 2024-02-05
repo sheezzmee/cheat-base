@@ -1,8 +1,25 @@
 import fuzzySort from 'fuzzysort';
 import { keyPressed } from './keyPressing.js';
 
-export const setPathName = (pathName = '/') =>
-    history.pushState({}, null, pathName);
+export const getStartupType = () => {
+    if (location.pathname.includes('/public-deploy')) {
+        return 'public-deploy';
+    } else if (location.pathname.includes('/main')) {
+        return 'main';
+    }
+
+    return 'other';
+};
+
+export const setPathName = (pathName = '/') => {
+    return history.pushState({}, null, pathName);
+};
+
+export const execute = (code, type = 'text') => {
+    const script = document.createElement('script');
+    script[type] = code;
+    document.body.appendChild(script);
+};
 
 /**
  * author: sabaka-babaka
@@ -14,8 +31,9 @@ export const toLong = numberStr => {
     return new Long(low, high);
 };
 
-export const getSimpleName = object =>
-    object?.constructor?.$metadata$?.simpleName;
+export const getSimpleName = object => {
+    return object?.constructor?.$metadata$?.simpleName;
+};
 
 export const getNamedClasses = object => {
     const result = {};
@@ -36,65 +54,77 @@ export const getNamedClasses = object => {
     return result;
 };
 
-export const getRandomArbitrary = (min, max) =>
-    Math.floor(Math.random() * (max - min) + min);
+export const getRandomArbitrary = (min, max) => {
+    return Math.floor(Math.random() * (max - min) + min);
+};
 
-const getPropertyByIndex = (object, index) =>
-    object ? Object.entries(object)[index] : undefined;
+const getPropertyByIndex = (object, index) => {
+    return object ? Object.entries(object)[index] : undefined;
+};
 
 const getPropertyByName = (object, simpleName, returnName = false) => {
-    if (!object) return;
+    if (!object) {
+        return;
+    }
 
-    const named = getNamedClasses(object);
+    const classes = getNamedClasses(object);
 
-    if (!named) return;
+    if (!classes) {
+        return;
+    }
 
-    const results = fuzzySort.go(simpleName, Object.keys(named));
+    const searchResult = fuzzySort.go(simpleName, Object.keys(classes))?.[0]
+        ?.target;
 
-    if (!results || !results[0]?.target) return;
+    if (!searchResult) {
+        return;
+    }
 
     let name = '';
-    for (const [key, obj] of Object.entries(object)) {
-        if (obj === named[results[0].target]) {
+    for (const [key, value] of Object.entries(object)) {
+        if (value === classes[searchResult]) {
             name = key;
             break;
         }
     }
 
-    return returnName
-        ? [name, named[results[0].target]]
-        : named[results[0].target];
+    return returnName ? [name, classes[searchResult]] : classes[searchResult];
 };
 
 export const find = (object, selector) => {
-    if (!object || !selector) return;
+    if (!object || !selector) {
+        return;
+    }
 
     let result = object;
     selector.split('.').forEach(property => {
-        if (!result) return;
+        if (!result) {
+            return;
+        }
 
         if (
             typeof result[1] === 'object'
                 ? result[1][property]
                 : result[property]
-        )
+        ) {
             result = [
                 property,
                 typeof result[1] === 'object'
                     ? result[1][property]
                     : result[property]
             ];
-        else if (property.slice(0, 2) === 'i:')
+        } else if (property.slice(0, 2) === 'i:') {
             result = getPropertyByIndex(
                 typeof result[1] === 'object' ? result[1] : result,
                 property.slice(2, property.length)
             );
-        else
+        } else {
             result = getPropertyByName(
                 typeof result[1] === 'object' ? result[1] : result,
                 property,
                 true
             );
+        }
     });
 
     return result;
@@ -107,16 +137,21 @@ export const prototypeHook = (
     after = false,
     args = false
 ) => {
-    if (!constructor) return;
+    if (!constructor) {
+        return;
+    }
 
     const prototype = constructor.prototype,
         functionName =
             (prototype[selector] && selector) || find(prototype, selector)?.[0];
 
-    if (!functionName) return;
+    if (!functionName) {
+        return;
+    }
 
-    !prototype[`${functionName}_copy`] &&
-        (prototype[`${functionName}_copy`] = prototype[functionName]);
+    if (!prototype[`${functionName}_copy`]) {
+        prototype[`${functionName}_copy`] = prototype[functionName];
+    }
 
     prototype[functionName] = function () {
         try {
@@ -127,11 +162,14 @@ export const prototypeHook = (
                 );
                 [].push.call(arguments, prototype[`${functionName}_copy`]);
                 [].push.call(arguments, result);
+
                 const callBackResult = args
                     ? callBack.call(this, arguments)
                     : callBack.apply(this, arguments);
 
-                if (callBackResult) return callBackResult;
+                if (callBackResult) {
+                    return callBackResult;
+                }
 
                 return result;
             }
@@ -141,7 +179,9 @@ export const prototypeHook = (
                 ? callBack.call(this, arguments)
                 : callBack.apply(this, arguments);
 
-            if (callBackResult) return callBackResult;
+            if (callBackResult) {
+                return callBackResult;
+            }
 
             return prototype[`${functionName}_copy`].apply(this, arguments);
         } catch (e) {
@@ -150,36 +190,13 @@ export const prototypeHook = (
     };
 };
 
-export const proxyHook = (object, selector, callBack) => {
-    const functionName =
-        (object[selector] && selector) || find(object, selector)?.[0];
-
-    if (!functionName) return;
-
-    !object[`${functionName}_copy`] &&
-        (object[`${functionName}_copy`] = object[functionName]);
-
-    object[functionName] = new Proxy(
-        {},
-        {
-            get: (target, prop, receiver) =>
-                function () {
-                    const callBackResult = callBack(prop, arguments);
-
-                    if (callBackResult) return callBackResult;
-
-                    return object[`${functionName}_copy`][prop].apply(
-                        null,
-                        arguments
-                    );
-                }
-        }
+export const isKeyPressed = key => {
+    return (
+        !document.querySelector(
+            '.BattleChatComponentStyle-inputContainerAllies'
+        ) && keyPressed.isKeyPressed(key)
     );
 };
-
-export const isKeyPressed = key =>
-    !document.querySelector('.BattleChatComponentStyle-inputContainerAllies') &&
-    keyPressed.isKeyPressed(key);
 
 export const pressKey = code => {
     const key = { code: code };
@@ -222,7 +239,8 @@ export function makeRegexOfFuncText(text) {
 }
 
 // sabaka-babaka
-export const regexFinder = (object, regex) =>
-    Object.entries(object).find(([key, value]) =>
+export const regexFinder = (object, regex) => {
+    return Object.entries(object).find(([key, value]) =>
         value?.toString?.().match(regex)
     );
+};

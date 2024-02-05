@@ -1,4 +1,4 @@
-import { getSimpleName } from './cheatBase/utils';
+import { getSimpleName } from './shared/utils';
 
 const colors = {
     number: 'hsl(252deg 100% 75%)',

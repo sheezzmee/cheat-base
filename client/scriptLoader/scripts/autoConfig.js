@@ -1,4 +1,4 @@
-import globalConfig from './config';
+import globalConfig from '../../shared/config';
 
 const config = Object.entries(globalConfig.scriptLoader.autoConfig.settings);
 
