@@ -1,5 +1,13 @@
 import { getSimpleName } from './cheatBase/utils';
 
+const colors = {
+    number: 'hsl(252deg 100% 75%)',
+    string: 'var(--sys-color-token-property-special)',
+    null: 'var(--sys-color-state-disabled)',
+    prototype: 'var(--sys-color-token-subtle)',
+    member: 'var(--sys-color-token-tag)'
+};
+
 const valueToString = value => {
     const name = getSimpleName(value);
     switch (typeof value) {
@@ -27,64 +35,88 @@ const valueToString = value => {
 const getValueColor = value => {
     const type = typeof value;
     if (type === 'number' || type === 'boolean') {
-        return '#9980FF';
+        return colors.number;
     }
     if (type === 'string') {
-        return '#5CD5FB';
+        return colors.string;
     }
     if (type === 'undefined' || value === null) {
-        return '#6F6F6F';
+        return colors.null;
     }
 };
 
-const pushString = (result, string, color) => {
-    result.push([
+const span = (string, color) => {
+    return [
         'span',
         color
             ? {
-                  style: `color: ${color}`
+                  style: `color: ${color};`
               }
             : {},
         string
-    ]);
+    ];
 };
 
 const stringify = object => {
+    let comma = false;
     const entries = Object.entries(object);
     const name = getSimpleName(object);
-    let result = [];
+    const elements = [];
 
-    pushString(result, `${name} `, '#8F8F81');
+    elements.push(span(`${name} `, colors.null));
+    elements.push(span('{'));
 
-    pushString(result, '{');
-    let first = false;
     for (const [key, value] of entries) {
-        if (result.length > 5) {
-            pushString(result, ', ...');
+        if (elements.length > 5) {
+            elements.push(span(', ...'));
             break;
         }
 
-        if (first) {
-            pushString(result, ', ');
+        if (comma) {
+            elements.push(span(', '));
         }
 
-        pushString(result, key, '#8F8F81');
-        pushString(result, ': ');
-        pushString(result, valueToString(value), getValueColor(value));
-        first = true;
+        elements.push(span(key, colors.null));
+        elements.push(span(': '));
+        elements.push(span(valueToString(value), getValueColor(value)));
+
+        comma = true;
     }
-    pushString(result, '}');
-    return result;
+
+    elements.push(span('}'));
+
+    return elements;
 };
 
-const output = (object, index, key, value, parent) => {
+const output = (object, index, key, value, parent, prototype = false) => {
     const result = [
         'div',
         {},
-        ['div', {}, `[${index}] ${key}: `, ['object', { object: null, config: object }]]
+        [
+            'div',
+            {},
+            [
+                'span',
+                {
+                    style: `font-weight: bold; color: ${colors.prototype};`
+                },
+                index !== null ? `[${index}] ` : ''
+            ],
+            [
+                'span',
+                {
+                    style: `${prototype ? '' : 'font-weight: bold; '}color: ${
+                        prototype ? colors.prototype : colors.member
+                    }; flex-shrink: 0;`
+                },
+                `${key}`
+            ],
+            ['span', {}, ': '],
+            ['object', { object: null, config: object }]
+        ]
     ];
 
-    const store = result[2][3][1];
+    const store = result[2].at(-1)[1];
 
     if (typeof value === 'undefined') {
         const descriptor = Object.getOwnPropertyDescriptor(object, key);
@@ -94,7 +126,9 @@ const output = (object, index, key, value, parent) => {
         } else {
             result[2][3] = [
                 'span',
-                { style: `color: ${getValueColor(undefined)}` },
+                {
+                    style: `color: ${colors.null};`
+                },
                 'undefined'
             ];
         }
@@ -111,7 +145,7 @@ window.devtoolsFormatters = [
             const name = getSimpleName(object);
 
             if (name) {
-                return ['div', {}, ...stringify(object)];
+                return ['span', {}, ...stringify(object)];
             }
         },
         hasBody: object => {
@@ -125,7 +159,16 @@ window.devtoolsFormatters = [
                 result.push(output(object, index, key, value, parent));
             });
 
-            result.push(output(object, '', 'prototype', object.__proto__));
+            result.push(
+                output(
+                    object,
+                    null,
+                    '[[Prototype]]',
+                    object.__proto__,
+                    null,
+                    true
+                )
+            );
             return result;
         }
     }
