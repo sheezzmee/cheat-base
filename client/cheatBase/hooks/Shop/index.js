@@ -2,10 +2,10 @@ import regex from './regex.js';
 import { find, regexFinder, prototypeHook } from '../../../shared/utils.js';
 
 export default () => {
-    const initFunction = regexFinder(Shop_2.prototype, regex.init);
+    const initFunction = regexFinder(Shop.prototype, regex.init);
 
     let enabled;
-    prototypeHook(Shop_2, initFunction[0], function () {
+    prototypeHook(Shop, initFunction[0], function () {
         if (!enabled) {
             enabled = find(this, 'i:9')[0];
         }

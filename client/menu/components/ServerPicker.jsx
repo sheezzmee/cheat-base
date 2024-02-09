@@ -1,14 +1,26 @@
 import { downloadScript } from '../..';
-import { setPathName } from '../../shared/utils';
-import servers from '../../shared/servers.json';
-
-const response = await fetch('/cors/https://test.tankionline.com/public_test');
-const deploys = await response.json();
+import { createQueryString, setPathName } from '../../shared/utils';
+import servers from '../../shared/servers';
+import { useEffect, useState } from 'react';
 
 export default ({ setLoading }) => {
+    const [deploys, setDeploys] = useState([]);
+
+    useEffect(() => {
+        const loadDeploys = async () => {
+            const response = await fetch(
+                `${window.proxy}https://test.tankionline.com/public_test`
+            );
+
+            setDeploys(await response.json());
+        };
+
+        loadDeploys();
+    }, []);
+
     return (
         <div className='server-picker'>
-            {deploys.map(deploy => {
+            {deploys?.map(deploy => {
                 const deployNumber =
                     +deploy.Release.match(/deploy(?<num>.+?)-/)[1];
                 return (
@@ -22,9 +34,9 @@ export default ({ setLoading }) => {
                                 )
                             );
                             setPathName(
-                                `public-deploy${deployNumber}${servers[
-                                    'public-deploy'
-                                ].search.replaceAll('[n]', deployNumber)}`
+                                `public-deploy${deployNumber}${createQueryString(
+                                    servers['public-deploy'].search
+                                ).replaceAll('[n]', deployNumber)}`
                             );
                         }}
                     >
@@ -36,7 +48,9 @@ export default ({ setLoading }) => {
                 onClick={() => {
                     setLoading(true);
                     downloadScript(servers.main.url);
-                    setPathName(`main${servers.main.search}`);
+                    setPathName(
+                        `main${createQueryString(servers.main.search)}`
+                    );
                 }}
             >
                 main

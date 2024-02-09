@@ -1,7 +1,11 @@
 import regex from './regex.js';
-import { find, regexFinder, prototypeHook } from '../../../shared/utils.js';
+import {
+    find,
+    regexFinder,
+    prototypeHook,
+    createProperty
+} from '../../../shared/utils.js';
 import { cheatBase } from '../..';
-import { createProperty } from '../index.js';
 
 export default () => {
     const runAfterPhysicsUpdate = regexFinder(

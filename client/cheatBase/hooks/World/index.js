@@ -1,6 +1,10 @@
 import regex from './regex.js';
-import { find, regexFinder, prototypeHook } from '../../../shared/utils.js';
-import { createProperty } from '../index.js';
+import {
+    find,
+    regexFinder,
+    prototypeHook,
+    createProperty
+} from '../../../shared/utils.js';
 import { cheatBase } from '../..';
 
 export default () => {

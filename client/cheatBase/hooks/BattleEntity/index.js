@@ -1,6 +1,5 @@
 import regex from './regex.js';
-import { find, regexFinder } from '../../../shared/utils.js';
-import { createProperty } from '../index.js';
+import { regexFinder } from '../../../shared/utils.js';
 
 export default () => {
     const sendFunction = regexFinder(BattleEntity.prototype, regex.send);
@@ -32,20 +31,4 @@ export default () => {
             handler
         );
     };
-
-    const entity = new BattleEntity();
-    Object.defineProperties(BattleEntity.prototype, {
-        components_map: createProperty(find(entity, 'map')[0]),
-        components: createProperty(find(entity, 'list')[0])
-    });
-
-    const map = new NativeIdentityMap();
-    Object.defineProperties(NativeIdentityMap.prototype, {
-        map: createProperty(find(map, 'i:0')[0])
-    });
-
-    const list = new NativeList();
-    Object.defineProperties(NativeList.prototype, {
-        array: createProperty(find(list, 'i:0')[0])
-    });
 };

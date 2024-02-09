@@ -3,7 +3,7 @@
     "private": true,
     "version": "1.0.0",
     "scripts": {
-        "dev": "SET NODE_ENV=development & rspack serve",
+        "dev": "SET NODE_ENV=development & rspack build",
         "build": "SET NODE_ENV=production & rspack build",
         "start": "node --experimental-modules index.mjs"
     },

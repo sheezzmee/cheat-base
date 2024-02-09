@@ -1,16 +1,14 @@
 import { cheatBase } from '../index.js';
-import { find } from '../../shared/utils.js';
+import { find, getNamedClasses } from '../../shared/utils.js';
 
 let destroy;
 export default class Player extends Event {
     entity = null;
     local = false;
     body = null;
-    state = null;
-    map = null;
     id = new GetPlayerId();
     team = new GetTeamQuery();
-
+    components = [];
     name = null;
 
     constructor(entity, isLocal) {
@@ -20,23 +18,39 @@ export default class Player extends Event {
         entity.send(this.id);
         entity.send(this.team);
 
+        this.components = getNamedClasses(this.entity.components.array);
         this.id = find(this.id, 'long')[1].toString();
         this.team = find(this.team, 'team.i:0')[1];
-        this.map = entity.components_map.map;
-        this.body = find(this.get(TankPhysicsComponent), 'body')[1];
-        this.state = find(this.body, 'state')[1];
+        this.body = find(this.components['TankPhysicsComponent'], 'body')[1];
+        this.body.state = find(this.body, 'state')[1];
+
+        try {
+            const { uid, clanTag } = cheatBase.users[this.id];
+            this.name = `${clanTag ? `[${clanTag}] ` : ''}${uid}`;
+        } catch (e) {
+            this.on(ConfigureUserTitleMessage, message => {
+                const userName = find(message, 'title.i:0')[1],
+                    clanTag = find(message, 'title.i:1')[1];
+
+                this.name = `${clanTag ? `[${clanTag}] ` : ''}${userName}`;
+            });
+        }
 
         if (isLocal) {
             this.local = true;
             cheatBase.battleClasses.localPlayer = this;
         }
 
-        if (!destroy) destroy = find(this.entity, '__proto__.i:11')[0];
+        if (!destroy) {
+            destroy = find(this.entity, '__proto__.i:11')[0];
+        }
 
         const __this__ = this;
         this.entity.destroy_copy = this.entity[destroy];
         this.entity[destroy] = function () {
-            if (__this__.local) cheatBase.battleClasses.localPlayer = null;
+            if (__this__.local) {
+                cheatBase.battleClasses.localPlayer = null;
+            }
 
             cheatBase.battleClasses.players =
                 cheatBase.battleClasses.players.filter(
@@ -45,13 +59,6 @@ export default class Player extends Event {
 
             return this.destroy_copy.apply(this, arguments);
         };
-
-        this.on(ConfigureUserTitleMessage, message => {
-            const userName = find(message, 'title.i:0')[1],
-                clanTag = find(message, 'title.i:1')[1];
-
-            this.name = `${clanTag ? `[${clanTag}] ` : ''}${userName}`;
-        });
 
         dispatchEvent(this);
 
@@ -92,14 +99,11 @@ export default class Player extends Event {
         );
     };
 
-    send = message => this.entity?.send(message);
-    on = (messageClass, handler, priority = 0, dispatchOnce = false) =>
-        this.entity?.on(messageClass, handler, priority, dispatchOnce);
-    get = kClass => {
-        const array = this.map?.get(kClass.$metadata$.$kClass$)?.array;
+    send = message => {
+        return this.entity?.send(message);
+    };
 
-        if (array?.length === 1) return array[0];
-
-        return array;
+    on = (messageClass, handler, priority = 0, dispatchOnce = false) => {
+        return this.entity?.on(messageClass, handler, priority, dispatchOnce);
     };
 }

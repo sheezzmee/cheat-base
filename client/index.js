@@ -1,17 +1,30 @@
 import { mount, unmount } from './menu/main';
-import servers from './shared/servers.json';
-import { setPathName, execute, getStartupType } from './shared/utils';
+import servers from './shared/servers';
+import {
+    setPathName,
+    execute,
+    getStartupType,
+    createQueryString
+} from './shared/utils';
 import { modifyScript } from './scriptModification';
 import { scriptLoader } from './scriptLoader';
 import './formatter';
+import './entranceHashKeyController';
+
+try {
+    await fetch('https://google.com');
+    window.proxy = '';
+} catch (e) {
+    window.proxy = '/cors/';
+}
 
 export const downloadScript = url => {
-    fetch(`/cors/${url}`).then(async response => {
+    fetch(`${window.proxy}${url}`).then(async response => {
         const responseText = await response.text();
         const [, scriptURL] = responseText.match(/defer="defer" src=\"(.+?)\"/);
 
         if (scriptURL) {
-            fetch(`/cors/${new URL(scriptURL, url).toString()}`).then(
+            fetch(`${window.proxy}${new URL(scriptURL, url).toString()}`).then(
                 async response => {
                     scriptLoader();
                     execute(modifyScript(await response.text(), url));
@@ -34,7 +47,9 @@ switch (getStartupType()) {
             const url = servers['public-deploy'].url.replace('[n]', server);
             setPathName(
                 location.pathname +
-                    servers['public-deploy'].search.replaceAll('[n]', server)
+                    createQueryString(
+                        servers['public-deploy'].search
+                    ).replaceAll('[n]', server)
             );
             downloadScript(url);
             break;
@@ -44,7 +59,7 @@ switch (getStartupType()) {
         mount();
         break;
     case 'main':
-        setPathName(location.pathname + servers.main.search);
+        setPathName(location.pathname + createQueryString(servers.main.search));
         downloadScript(servers.main.url);
         break;
     default:

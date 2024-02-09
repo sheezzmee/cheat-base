@@ -58,7 +58,7 @@ export const getRandomArbitrary = (min, max) => {
     return Math.floor(Math.random() * (max - min) + min);
 };
 
-const getPropertyByIndex = (object, index) => {
+export const getPropertyByIndex = (object, index) => {
     return object ? Object.entries(object)[index] : undefined;
 };
 
@@ -232,6 +232,9 @@ function escapeDollars(str) {
 
 // sabaka-babaka
 export function makeRegexOfFuncText(text) {
+    if (!text) {
+        return;
+    }
     text = escapeRegExpSpecialCharacters(text);
     text = replaceMangledNames(text);
     text = escapeDollars(text);
@@ -243,4 +246,45 @@ export const regexFinder = (object, regex) => {
     return Object.entries(object).find(([key, value]) =>
         value?.toString?.().match(regex)
     );
+};
+
+export const createProperty = name => ({
+    get: function () {
+        return this[name];
+    },
+    set: function (value) {
+        this[name] = value;
+    },
+    configurable: true,
+    enumerable: true
+});
+
+export const defineProperties = (kotlinClass, names) => {
+    const object = new kotlinClass();
+    const properties = {};
+
+    names.forEach((name, index) => {
+        if (!name) {
+            return;
+        }
+
+        properties[name] = createProperty(find(object, `i:${index}`)[0]);
+    });
+
+    Object.defineProperties(kotlinClass.prototype, properties);
+};
+
+export const createQueryString = objectParams => {
+    let result = '?';
+
+    const searchParams = new URLSearchParams(objectParams);
+    Array.from(searchParams).forEach(([key, value], index) => {
+        if (index !== 0) {
+            result += '&';
+        }
+
+        result += `${key}=${value}`;
+    });
+
+    return result;
 };

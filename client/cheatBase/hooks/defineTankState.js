@@ -1,4 +1,4 @@
-import { createProperty } from '.';
+import { createProperty } from '../../shared/utils';
 
 const getMangledName = index => {
     const [, name] = TankState.prototype.entries[index][1]

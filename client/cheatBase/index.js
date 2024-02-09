@@ -1,15 +1,40 @@
-import * as utils from '../shared/utils.js';
-import hooks from './hooks/index.js';
-import config, { saveConfig } from '../shared/config.js';
+import * as utils from '../shared/utils';
+import hooks from './hooks';
+import * as features from './features';
+import config, { saveConfig } from '../shared/config';
 
 let dispatchFunction;
 class CheatBase extends Event {
     _dispatchLog = config.dispatchLog;
     ready = false;
+    utils = utils;
+    features = features;
+    battleClasses = {};
+    gameClasses = {};
+    users = {};
+    runAfterPhysicsUpdate = [];
+
+    get dispatchLog() {
+        return this._dispatchLog;
+    }
+
+    set dispatchLog(value) {
+        this._dispatchLog = value;
+        config.dispatchLog = value;
+        saveConfig();
+    }
+
+    get version() {
+        return '1.1.0';
+    }
 
     constructor() {
         super('cheat-base-ready');
     }
+
+    dispatch = action => {
+        return this.gameClasses.store?.dispatchFunction(action);
+    };
 
     init = function () {
         this.init = () => {};
@@ -48,26 +73,6 @@ class CheatBase extends Event {
             };
         });
     };
-
-    dispatch = action => this.gameClasses.store?.dispatchFunction(action);
-    utils = utils;
-    battleClasses = {};
-    gameClasses = {};
-    runAfterPhysicsUpdate = [];
-
-    get dispatchLog() {
-        return this._dispatchLog;
-    }
-
-    set dispatchLog(value) {
-        this._dispatchLog = value;
-        config.dispatchLog = value;
-        saveConfig();
-    }
-
-    get version() {
-        return '1.1.0';
-    }
 }
 
 export const cheatBase = new CheatBase();
