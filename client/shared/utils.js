@@ -1,5 +1,6 @@
 import fuzzySort from 'fuzzysort';
-import { keyPressed } from './keyPressing.js';
+import { keyPressed } from './keyPressing';
+import { battleChat } from '../cheatBase/features/battleChat';
 
 export const getStartupType = () => {
     if (location.pathname.includes('/public-deploy')) {
@@ -191,11 +192,7 @@ export const prototypeHook = (
 };
 
 export const isKeyPressed = key => {
-    return (
-        !document.querySelector(
-            '.BattleChatComponentStyle-inputContainerAllies'
-        ) && keyPressed.isKeyPressed(key)
-    );
+    return battleChat.isInputActive() !== true && keyPressed.isKeyPressed(key);
 };
 
 export const pressKey = code => {

@@ -1,35 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
+import './input.scss'
 
 let root,
-	reactRoot,
-	isMount = false;
+    reactRoot,
+    isMount = false;
 
 export const mount = () => {
-	if (isMount) {
-		return;
-	}
-	root = document.createElement('div');
-	root.style.cssText =
-		'z-index: 100; position: fixed; background-color: black; width: 100%; height: 100%; margin: 0;';
-	document.body.appendChild(root);
+    if (isMount) {
+        return;
+    }
+    root = document.createElement('div');
+    root.classList.add('cheat-base-wrapper');
+    document.body.appendChild(root);
 
-	reactRoot = ReactDOM.createRoot(root);
+    reactRoot = ReactDOM.createRoot(root);
 
-	reactRoot.render(
-		<React.StrictMode>
-			<App />
-		</React.StrictMode>
-	);
+    reactRoot.render(
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    );
 
-	isMount = true;
+    isMount = true;
 };
 
 export const unmount = () => {
-	if (isMount) {
-		reactRoot.unmount();
-		root.remove();
-		isMount = false;
-	}
+    if (isMount) {
+        reactRoot.unmount();
+        root.remove();
+        isMount = false;
+    }
 };

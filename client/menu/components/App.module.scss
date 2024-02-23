@@ -1,6 +1,109 @@
-.loader {
-	position: fixed;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
+.root {
+    & > header {
+        display: flex;
+        justify-content: space-between;
+
+        margin: 0.625em 1.25em;
+        color: white;
+
+        & > .logo {
+            display: flex;
+            align-items: center;
+            width: max-content;
+
+            & > .image {
+                width: 5.313em;
+                height: 5.313em;
+                background-image: url(../assets/ico.png);
+                background-size: cover;
+                background-position: center center;
+            }
+
+            & > .text {
+                color: white;
+                font-size: 2em;
+            }
+        }
+
+        & > nav {
+            display: flex;
+            align-items: center;
+            gap: 1.625em;
+
+            & > span {
+                color: #adadad;
+                font-size: 1.5em;
+                font-weight: 400;
+            }
+
+            & > .icons {
+                display: flex;
+                gap: 1.625em;
+                padding-left: 1.625em;
+                border-left: solid 1px rgba(173, 173, 173, 0.52);
+
+                & > .discord_ico {
+                    background-image: url(../assets/discord_server.png);
+                    background-size: cover;
+                    background-position: center center;
+                    width: 2.726em;
+                    height: 2.063em;
+                }
+
+                & > .github_ico {
+                    background-image: url(../assets/github.png);
+                    background-size: cover;
+                    background-position: center center;
+                    width: 2.188em;
+                    height: 2.063em;
+                }
+            }
+        }
+    }
+
+    & > main.home {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10.5em;
+        text-align: center;
+
+        & > h1 {
+            font-weight: 500;
+            font-size: 2em;
+            color: white;
+            margin: 0;
+
+            & > .copycat {
+                color: #00f0ff;
+            }
+
+            & > .red {
+                color: #ff0000;
+                font-weight: 800;
+            }
+        }
+
+        & > p {
+            color: #adadad;
+            font-weight: 400;
+            font-size: 1.25em;
+            width: 39.563em;
+            margin: 1.125em 0 0 0;
+        }
+
+        & > button {
+            background-color: #a70000;
+            color: white;
+            font-weight: 800;
+            font-size: 1.5em;
+            margin: 3.097em 0 3.097em 0;
+            width: 9em;
+            height: 3em;
+            border: unset;
+            border-radius: 0.75em;
+            cursor: pointer;
+        }
+    }
 }

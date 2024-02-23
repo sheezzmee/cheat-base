@@ -6,10 +6,9 @@ import {
     getStartupType,
     createQueryString
 } from './shared/utils';
-import { modifyScript } from './scriptModification';
 import { scriptLoader } from './scriptLoader';
 import './formatter';
-import './entranceHashKeyController';
+import { editScript } from './mainScriptEditor';
 
 try {
     await fetch('https://google.com');
@@ -19,15 +18,18 @@ try {
 }
 
 export const downloadScript = url => {
+    location.source = url;
+
     fetch(`${window.proxy}${url}`).then(async response => {
         const responseText = await response.text();
         const [, scriptURL] = responseText.match(/defer="defer" src=\"(.+?)\"/);
 
         if (scriptURL) {
             fetch(`${window.proxy}${new URL(scriptURL, url).toString()}`).then(
+                //fetch('./public/test.js').then(
                 async response => {
                     scriptLoader();
-                    execute(modifyScript(await response.text(), url));
+                    execute(editScript(await response.text()));
                     unmount();
                 }
             );

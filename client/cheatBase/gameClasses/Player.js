@@ -20,11 +20,11 @@ export default class Player extends Event {
 
         this.components = getNamedClasses(this.entity.components.array);
         this.id = find(this.id, 'long')[1].toString();
-        this.team = find(this.team, 'team.i:0')[1];
+        this.team = find(this.team, 'i:0.i:0')?.[1];
         this.body = find(this.components['TankPhysicsComponent'], 'body')[1];
         this.body.state = find(this.body, 'state')[1];
 
-        try {
+        /*try {
             const { uid, clanTag } = cheatBase.users[this.id];
             this.name = `${clanTag ? `[${clanTag}] ` : ''}${uid}`;
         } catch (e) {
@@ -34,7 +34,7 @@ export default class Player extends Event {
 
                 this.name = `${clanTag ? `[${clanTag}] ` : ''}${userName}`;
             });
-        }
+        }*/
 
         if (isLocal) {
             this.local = true;

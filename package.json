@@ -8,6 +8,7 @@
         "start": "node --experimental-modules index.mjs"
     },
     "dependencies": {
+        "@monaco-editor/react": "^4.6.0",
         "cors-anywhere": "^0.4.4",
         "express": "^4.18.2",
         "fuzzysort": "^2.0.4",
@@ -23,6 +24,7 @@
         "@rspack/plugin-react-refresh": "0.5.3",
         "@types/react": "^18.2.48",
         "@types/react-dom": "^18.2.18",
+        "raw-loader": "^4.0.2",
         "react-refresh": "^0.14.0"
     }
 }

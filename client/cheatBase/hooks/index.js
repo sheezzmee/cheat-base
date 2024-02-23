@@ -1,9 +1,16 @@
-import { defineProperties, prototypeHook, find, createProperty } from '../../shared/utils.js';
+import {
+    defineProperties,
+    prototypeHook,
+    find,
+    createProperty
+} from '../../shared/utils.js';
 import battleEntityHooks from './BattleEntity';
 import shopHooks from './Shop';
 import worldHooks from './World';
 import gameModeHooks from './GameMode';
 import localTankStateServerSenderComponentHooks from './LocalTankStateServerSenderComponent';
+import inventoryModelHooks from './InventoryModel';
+import tankSpawnerModelHooks from './TankSpawnerModel';
 import defineTankState from './defineTankState';
 import { cheatBase } from '../index.js';
 
@@ -14,7 +21,7 @@ export default () => {
         worldHooks();
         gameModeHooks();
         localTankStateServerSenderComponentHooks();
-        //defineTankState();
+        defineTankState();
     } catch (error) {
         console.error(error);
     }
@@ -55,40 +62,66 @@ export default () => {
         this.z = z || 0;
     };
 
-    /*TankState.prototype.init = function () {
+    TankState.prototype.init = function () {
         this.angularVelocity = new Vector3();
         this.linearVelocity = new Vector3();
         this.orientation = new Vector3();
         this.position = new Vector3();
-    };*/
+    };
 
     for (const key in AlternativaLogger.prototype) {
         AlternativaLogger.prototype[key] = () => {};
     }
 
-    /*prototypeHook(UidNotifierModel, 'i:1', users => {
-        for (const userData of users.toArray()) {
-            const id = find(userData, 'i:0')[1].string;
-            const uid = find(userData, 'i:1')[1];
+    addEventListener('cheat-base-ready', () => {
+        prototypeHook(UidNotifierModel, 'i:1', users => {
+            for (const userData of users.toArray()) {
+                const id = find(userData, 'i:0')[1].string;
+                const uid = find(userData, 'i:1')[1];
 
-            if (!cheatBase.users.hasOwnProperty(id)) {
-                cheatBase.users[id] = {};
+                if (!cheatBase.users.hasOwnProperty(id)) {
+                    cheatBase.users[id] = {};
+                }
+
+                cheatBase.users[id].uid = uid;
             }
+        });
 
-            cheatBase.users[id].uid = uid;
-        }
+        prototypeHook(ClanNotifierModel, 'i:3', userData => {
+            for (const clanData of userData.toArray()) {
+                const clanTag = find(clanData, 'i:3')[1];
+                const id = find(clanData, 'i:10')[1].string;
+
+                if (!cheatBase.users.hasOwnProperty(id)) {
+                    cheatBase.users[id] = {};
+                }
+
+                cheatBase.users[id].clanTag = clanTag;
+            }
+        });
+
+        inventoryModelHooks();
+        tankSpawnerModelHooks();
     });
 
-    prototypeHook(ClanNotifierModel, 'i:3', userData => {
-        for (const clanData of userData.toArray()) {
-            const clanTag = find(clanData, 'i:3')[1];
-            const id = find(clanData, 'i:10')[1].string;
+    for (const key in window) {
+        if (window[key]?.prototype?.constructor?.$metadata$) {
+            const prototype = window[key].prototype;
+            const string = prototype.toString.toString();
+            const fields = Array.from(
+                string.matchAll(
+                    /(?:(?:\w+)="\+this\.(?:\w+)\.)|(?:(?:\w+)="\+this\.(?:\w+)\()|(?:(?<name>\w+)="\+(?:\w+?\()?this\.(?<mangledName>\w+)\)?)/g
+                )
+            ).map(field => field.groups);
 
-            if (!cheatBase.users.hasOwnProperty(id)) {
-                cheatBase.users[id] = {};
-            }
+            const properties = {};
+            fields.forEach(field => {
+                if (field.name && field.mangledName) {
+                    properties[field.name] = createProperty(field.mangledName);
+                }
+            });
 
-            cheatBase.users[id].clanTag = clanTag;
+            Object.defineProperties(prototype, properties);
         }
-    });*/
+    }
 };

@@ -1,7 +1,7 @@
 import { createProperty } from '../../shared/utils';
 
 const getMangledName = index => {
-    const [, name] = TankState.prototype.entries[index][1]
+    const [, name] = Object.entries(TankState.prototype)[index][1]
         .toString()
         .match(
             /function\(\)\{var [\w$]+=this\.([\w$]+);if\(null!=[\w$]+\)return [\w$]+;[\w$]+\("(\w+)"\)\}/

@@ -1,0 +1,26 @@
+.root {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    padding: 0 1.063em;
+    display: flex;
+    width: calc(100% - 1.063em * 2);
+
+    & > button {
+        width: 50%;
+        height: 36.313em;
+        margin: 0;
+        border: unset;
+
+        &.test {
+            background-image: url(../assets/test.jpg);
+            border-bottom-left-radius: 6.25em;
+        }
+
+        &.main {
+            background-image: url(../assets/main.png);
+            border-top-right-radius: 6.25em;
+        }
+    }
+}
