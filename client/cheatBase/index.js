@@ -58,9 +58,9 @@ class CheatBase extends Event {
                     window.cheatBase = __this__;
                 }
 
-                if (actionName === 'PauseActivated') {
-                    return dispatchFunction.call(this, new DeactivatePause());
-                }
+                //if (actionName === 'PauseActivated') {
+                //    return dispatchFunction.call(this, new DeactivatePause());
+                //}
 
                 const event = new Event(actionName);
                 event.action = action;

@@ -4,7 +4,8 @@ import './entranceHashKeyFixer';
 import './setMetadataHook';
 import './crashMapFixer';
 import './URLFixer';
-import './getExports'
+import './getExports';
+import './packetAccumulation';
 
 export const editScript = code => {
     for (const callback of modifications) {

@@ -3,6 +3,7 @@ import restoreNameViaRegex from './restoreNameViaRegex';
 import putConstructorInWindow from './putConstructorInWindow';
 import explodeToString from './explodeToString';
 import restoreModels from './restoreModels';
+import restoreNamesViaExports from './restoreNamesViaExports';
 import restoreNamesViaNew from './restoreNamesViaNew';
 import defineHelpers from './defineHelpers';
 import { cheatBase } from '../../cheatBase';
@@ -22,8 +23,31 @@ window.setMetadata = (constructor, name) => {
             return;
         }
 
+        if (name === 'WebSocketConnection') {
+            const byteBufferWrapperClearFunc = Object.entries(
+                ByteBufferWrapper.prototype
+            ).find(e => e[1].toString().match(/function\(\){this\.\w+=0/));
+
+            constructor.prototype.getOutputBuffer = function () {
+                if (!this.outputBuffer) {
+                    this.outputBuffer = allocateByteBuffer(1280000);
+                }
+
+                return this.outputBuffer;
+            };
+
+            constructor.prototype.clearOutputBuffer = function () {
+                if (!this.outputBuffer) {
+                    return;
+                }
+
+                byteBufferWrapperClearFunc[1].call(this.outputBuffer);
+            };
+        }
+
         if (name === lastSimpleName) {
             restoreNamesViaNew();
+            //restoreNamesViaExports();
             cheatBase.init();
         }
 

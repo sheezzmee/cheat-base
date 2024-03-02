@@ -62,11 +62,33 @@ export default () => {
         this.z = z || 0;
     };
 
-    TankState.prototype.init = function () {
+    TankState.prototype.init = function (useBodyState = true) {
         this.angularVelocity = new Vector3();
         this.linearVelocity = new Vector3();
         this.orientation = new Vector3();
         this.position = new Vector3();
+
+        if (useBodyState) {
+            const player = cheatBase.battleClasses.localPlayer;
+
+            if (player) {
+                const physics = player.components?.['TankPhysicsComponent'];
+
+                if (physics) {
+                    const state = find(physics.__proto__, 'i:13')?.[1]?.call(
+                        physics
+                    );
+
+                    if (state) {
+                        find(TankStateUtils.prototype, 'i:0')[1].call(
+                            null,
+                            this,
+                            state
+                        );
+                    }
+                }
+            }
+        }
     };
 
     for (const key in AlternativaLogger.prototype) {

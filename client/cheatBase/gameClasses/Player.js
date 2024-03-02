@@ -86,7 +86,8 @@ export default class Player extends Event {
             );
 
         if (!this.serverSender)
-            this.serverSender = this.get(LocalTankStateServerSenderComponent);
+            this.serverSender =
+                this.components['LocalTankStateServerSenderComponent'];
 
         const sendState = cheatBase.utils.regexFinder(
             TankModel.prototype,

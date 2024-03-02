@@ -37,6 +37,10 @@ export const getSimpleName = object => {
 };
 
 export const getNamedClasses = object => {
+    if (!object) {
+        return;
+    }
+
     const result = {};
 
     for (const [key, value] of Object.entries(object)) {
@@ -285,3 +289,9 @@ export const createQueryString = objectParams => {
 
     return result;
 };
+
+export const isKClass = constructor => {
+    return !!constructor?.$metadata$?.hasOwnProperty('simpleName');
+};
+
+window.isKClass = isKClass;
